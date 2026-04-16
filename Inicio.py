@@ -55,10 +55,10 @@ canvas_result = st_canvas(
     stroke_width=stroke_width,
     stroke_color=stroke_color,
     background_color=bg_color,
-    height=300,
-    width=400,
+    height=canvas_height,
+    width=canvas_width,
     drawing_mode=drawing_mode,
-    key="canvas",
+    key=f"canvas_{canvas_width}_{canvas_height}",
 )
 
 ke = st.text_input('Ingresa tu Clave', type="password")
