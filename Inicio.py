@@ -29,18 +29,25 @@ def encode_image_to_base64(image_path):
 
 
 # Streamlit 
-st.set_page_config(page_title='Tablero Inteligente')
-st.title('Tablero Inteligente')
-with st.sidebar:
-    st.subheader("Acerca de:")
-    st.subheader("En esta aplicación veremos la capacidad que ahora tiene una máquina de interpretar un boceto")
-st.subheader("Dibuja el boceto en el panel y presiona el botón para analizarla")
+st.title("Consejos para dibujar")
 
-# Add canvas component
-drawing_mode = "freedraw"
-stroke_width = st.sidebar.slider('Selecciona el ancho de línea', 1, 30, 5)
-stroke_color = "#000000" 
-bg_color = '#FFFFFF'
+with st.sidebar:
+    st.subheader("Propiedades del tablero")
+  
+    st.subheader("Tamaño del tablero")
+    canvas_width = st.slider("Ancho del tablero", 300, 700, 500, 50)
+    canvas_height = st.slider("Alto del tablero", 200, 600, 300, 50)
+  
+    drawing_mode = st.selectbox(
+      "Trazos",
+      ("freedraw", "line", "rect", "circle", "transform", "polygon", "point"),
+    )
+  
+    stroke_width = st.slider ("Selecciona el tamaño de tu Trazo", 1, 30, 15)
+  
+    stroke_color = st.color_picker("Color de trazo", "#FFFFFF")
+  
+    bg_color = st.color_picker("Color del fondo", "#000000")
 
 # Create a canvas component
 canvas_result = st_canvas(
@@ -127,7 +134,7 @@ if st.session_state.analysis_done:
     
     if st.button("✨ Crear historia infantil"):
         with st.spinner("Creando historia..."):
-            story_prompt = f"Basándote en esta descripción: '{st.session_state.full_response}', crea una historia infantil breve y entretenida. La historia debe ser creativa y apropiada para niños."
+            story_prompt = f"Basándote en esta descripción: '{st.session_state.full_response}', dame consejos de que podria agregarle o quitarle a mi dibujo"
             
             story_response = openai.chat.completions.create(
                 model="gpt-4o-mini",
@@ -135,7 +142,7 @@ if st.session_state.analysis_done:
                 max_tokens=500,
             )
             
-            st.markdown("**📖 Tu historia:**")
+            st.markdown("**Consejito:**")
             st.write(story_response.choices[0].message.content)
 
 # Warnings for user action required
